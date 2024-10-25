@@ -342,4 +342,40 @@ public class LeetCode : MonoBehaviour
         }
         return dp[amount] > amount ? -1 : dp[amount];
     }
+    //[1009] 十进制整数的反码
+    public int BitwiseComplement(int n)
+    {
+        var highBit = 0;
+        var i = 0;
+        while(n >= (1 << i)) {
+            highBit = i;
+            i++;
+        }
+        var mask = (highBit == 30 ? 0x7fffffff : (1 << (highBit + 1)) - 1);
+        return n ^ mask;
+    }
+    //[101] 对称二叉树
+    public class TreeNode
+    {
+        public int val;
+        public TreeNode left;
+        public TreeNode right;
+
+        public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+        {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+    public bool IsSymmetric(TreeNode root)
+    {
+        return IsSymmetricCompare(root.left, root.right);
+    }
+    public bool IsSymmetricCompare(TreeNode root1, TreeNode root2)
+    {
+        if(root1 == null && root2 == null) return true;
+        if(root1 == null || root2 == null || root1.val != root2.val) return false;
+        return IsSymmetricCompare(root1.left, root2.right) & IsSymmetricCompare(root1.right, root2.left);
+    }
 }
