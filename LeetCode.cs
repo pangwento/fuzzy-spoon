@@ -378,4 +378,35 @@ public class LeetCode : MonoBehaviour
         if(root1 == null || root2 == null || root1.val != root2.val) return false;
         return IsSymmetricCompare(root1.left, root2.right) & IsSymmetricCompare(root1.right, root2.left);
     }
+    // [9] 回文数
+    public bool IsPalindrome(int x) {
+        if(x < 0) return false;
+        var ans = 0;
+        var r = x;
+        while(r > 0)
+        {
+            ans *= 10;
+            ans += r % 10;
+            r /= 10;
+        }
+        return ans == x;
+    }
+    // [28] 找出字符串中第一个匹配项的下标
+    public int StrStr(string haystack, string needle) {
+        for(var i = 0; i <= haystack.Length - needle.Length; i++)
+        {
+            var s = i;
+            for(var j = 0; j < needle.Length; j++)
+            {
+                if(haystack[s]!= needle[j])
+                {
+                    break;
+                }
+                s++;
+            }
+            if(s == (i + needle.Length))
+                return i;
+        }
+        return -1;
+    }
 }
