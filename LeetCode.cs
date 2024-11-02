@@ -433,4 +433,76 @@ public class LeetCode : MonoBehaviour
         }
         return avgList;
     }
+    //[383] 赎金信
+    public bool CanConstruct(string ransomNote, string magazine)
+    {
+        if (ransomNote.Length > magazine.Length)
+            return false;
+        var cnt = new int[26];
+        foreach (var c in magazine)
+        {
+            cnt[c - 'a']++;
+        }
+
+        foreach (var c in ransomNote)
+        {
+            cnt[c - 'a']--;
+            if (cnt[c - 'a'] < 0) 
+                return false;
+        }
+        return true;
+    }
+    // [66] 加一
+    public int[] PlusOne(int[] digits) {
+        for (var i = digits.Length - 1; i >= 0; i--)
+        {
+            if (digits[i] == 9) 
+                digits[i] = 0;
+            else
+            {
+                digits[i] += 1;
+                return digits;
+            }
+        }
+
+        var digitsNew = new int[digits.Length + 1];
+        digitsNew[0] = 1;
+        return digitsNew;
+    }
+    // [67] 二进制求和
+    public string AddBinary(string a, string b)
+    {
+        var m = a.Length;
+        var n = b.Length;
+        var max = Math.Max(m, n);
+        var carry = 0;
+        var ans = new StringBuilder();
+        for (var i = 1; i <= max; i++)
+        {
+            var sum = carry;
+            if (m - i >= 0)
+            {
+                var va =  a[m - i] == '1' ? 1 : 0 ;
+                sum += va ;
+            }
+            if (n - i >= 0)
+            {
+                var vb = b[n - i] == '1' ? 1  : 0;
+                sum += vb;
+            }
+            if (sum >= 2)
+            {
+                carry = 1;
+                sum -= 2;
+            }
+            else
+                carry = 0;
+            ans.Append( sum == 0 ? '0' : '1');
+        }
+        if (carry == 1)
+            ans.Append('1');
+        var chars = ans.ToString().ToCharArray();
+        Array.Reverse(chars);
+        return chars.ToString();
+    }
 }
