@@ -409,4 +409,28 @@ public class LeetCode : MonoBehaviour
         }
         return -1;
     }
+    // [637] 二叉树的层平均值
+    public IList<double> AverageOfLevels(TreeNode root)
+    {
+        var avgList = new List<double>();
+        var queue = new Queue<TreeNode>();
+        queue.Enqueue(root);
+        while (queue.Count > 0)
+        {
+            var cnt = queue.Count;
+            var i = cnt;
+            var sum = 0.0;
+            while (i > 0)
+            {
+                var node = queue.Dequeue();
+                if(node.left != null) queue.Enqueue(node.left);
+                if(node.right != null) queue.Enqueue(node.right);
+                
+                sum += node.val;
+                i--;
+            }
+            avgList.Add(sum / cnt);
+        }
+        return avgList;
+    }
 }
