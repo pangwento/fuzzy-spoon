@@ -505,4 +505,46 @@ public class LeetCode : MonoBehaviour
         Array.Reverse(chars);
         return chars.ToString();
     }
+    //[392] 判断子序列
+    public bool IsSubsequence(string s, string t)
+    {
+        var dp = new int[t.Length + 1];
+        for (var i = 1; i <= t.Length; i++)
+        {
+            dp[i] = dp[i - 1];
+            if (dp[i] == s.Length) return true;
+            if (t[i-1] == s[dp[i - 1]]) dp[i]++;
+        }
+        return dp[t.Length] >= s.Length;
+    }
+    //[125] 验证回文串
+    public bool IsPalindrome(string s)
+    {
+        var l = 0;
+        var r = s.Length-1;
+        while (l < r)
+        {
+            while (l < r && !IsLetterOrDigit(s[l]))
+            {
+                l++;
+            }
+            while (l < r && !IsLetterOrDigit(s[r]))
+            {
+                r--;
+            }
+            if (l < r)
+            {
+                if (char.ToLower(s[l]) != char.ToLower(s[r])) return false;
+                l++;
+                r--;
+            }
+        }
+        return true;
+    }
+    public bool IsLetterOrDigit(char a)
+    {
+        return (a >= 'A' && a <= 'Z') ||
+               (a >= 'a' && a <= 'z') ||
+               (a >= '0' && a <= '9');
+    }
 }
