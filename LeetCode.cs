@@ -547,4 +547,29 @@ public class LeetCode : MonoBehaviour
                (a >= 'a' && a <= 'z') ||
                (a >= '0' && a <= '9');
     }
+    // [141] 环形链表
+    public class ListNode
+    {
+        public int val;
+        public ListNode next;
+
+        public ListNode(int x)
+        {
+            val = x;
+            next = null;
+        }
+    }
+    public bool HasCycle(ListNode head)
+    {
+        if (head == null) return false;
+        var ptr1 = head;
+        var ptr2 = head.next;
+        while (ptr1 != null && ptr2 != null)
+        {
+            if (ptr1 == ptr2) return true;
+            ptr1 = ptr1.next;
+            ptr2 = ptr2.next?.next;
+        }
+        return false;
+    }
 }
