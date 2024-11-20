@@ -106,3 +106,54 @@ unity会为每个AssetBundle生成一个Manifest文件，记录所有AssetBundle
 ```c#
     string hash = manifest.GetAssetBunldeHash("mybundle").ToString();
 ```
+### 如何检查AssetBundle循环依赖
+AssetBundle的循环依赖指的是两个或者多个AssetBundle相互依赖，形成一个闭环依赖关系
++ 使用AssetBundle Manifest文件检测循环依赖
+    每个构件AssetBundle时，Unity会生成一个AssetBundleManifest文件。该文件记录了所有AssetBundle的依赖关系，包括每个AssetBundle依赖的其他AssetBundle文件。
+    + 1.生成和获取Manifest文件。BuildPipeline.BuildAssetBundles方法构建AB,并生成对应的Manifest文件。
+    + 2.读取Manifest文件并检查依赖关系。读取所有AB之间的依赖关系，通过地柜查找依赖关系，检测是否存在循环依赖。
+    ```c#
+    public  class AssetBundleDependencyChercker : MonoBehaviour
+    {
+        public static void CheckAssetBundleDependencies(string assetBundlePath)
+        {
+            var manifestBundle = AssetBundle.LoadFromFile(assetBundlePath + "/AssetBundles");
+            var manifest = manifestBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+            
+            string[] assetBundles = manifest.GetAllAssetBundles();
+            Dictionary<string, List<string>> dependencies = new Dictionary<string, List<string>>();
+            forearch(var ab in assetBundles)
+            {
+                string[] deps = manifest.GetAllDependencies(ab);
+                dependencies[ab] = new List<string>(deps);
+            }
+            
+            foreach(var bundle in dependencies)
+            {
+                HashSet<string> visited = new HashSet<string>();
+                if(HasCircularDependency(bundle.Key, dependencies, visited))
+                {
+                    Debug.LogError("Found circular dependency in AssetBundle:"+bundle.Key);
+                }
+            }
+        }
+        
+        private static bool HasCircularDependency(string assetBundle, Dictionary<string, List<string>> dependencies, HashSet<string> visited)
+        {
+            if(visited.Contains(assetBundle))
+            {
+                return true;
+            }
+            visited.Add(assetBundle);
+            
+            foreach(var dep in dependencies[assetBundle])
+            {
+                if(HasCircularDependency(dep, dependecies, visited))
+                {
+                    return true;
+                }
+            }
+            visited.Remove(assetBundle);
+            return false;
+        }
+    }
