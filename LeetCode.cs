@@ -572,4 +572,64 @@ public class LeetCode : MonoBehaviour
         }
         return false;
     }
+    // [205] 同构字符串
+    public bool IsIsomorphic(string s, string t)
+    {
+        for (var i = 0; i < s.Length; i++)
+        {
+            if (s.IndexOf(s[i]) != t.IndexOf(t[i]))
+                return false;
+        }
+        return true;
+    }
+    // [290].单词规律
+    public bool WordPattern(string pattern, string s)
+    {
+        Dictionary<char, string> lookup1 = new Dictionary<char, string>();
+        Dictionary<string, char> lookup2 = new Dictionary<string, char>();
+
+        var sList = s.Split(' ');
+        if (sList.Length != pattern.Length) return false;
+
+        for (var i = 0; i < sList.Length; i++)
+        {
+            var str = sList[i];
+            var c = pattern[i];
+            if (!lookup1.TryGetValue(c, out var _str) && !lookup2.TryGetValue(str, out var _c))
+            {
+                lookup1.Add(c, str);
+                lookup2.Add(str, c);
+            }
+            else
+            {
+                if (str != _str) return false;
+                if (!lookup2.ContainsKey(str) || lookup2[str] != c) return false;
+            }
+        }
+        return true;
+    }
+    // [242] 有效的字母异位词
+    public bool IsAnagram(string s, string t)
+    {
+        if (s.Length != t.Length) return false;
+        var counter = new Dictionary<char, int>();
+        for (var i = 0; i < s.Length; i++)
+        {
+            if (counter.TryGetValue(s[i], out var count))
+            {
+                counter[s[i]] = count+1;
+            }
+            else 
+                counter.Add(s[i], 1);
+        }
+        for (var i = 0; i < t.Length; i++)
+        {
+            if (!counter.TryGetValue(t[i], out var count) || count == 0)
+            {
+                return false;
+            }
+            counter[t[i]] = count-1;
+        }
+        return true;
+    }
 }
