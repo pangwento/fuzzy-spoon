@@ -632,4 +632,14 @@ public class LeetCode : MonoBehaviour
         }
         return true;
     }
+    //[136] 只出现一次的数字
+    public int SingleNumber(int[] nums)
+    {
+        var ans = 0;
+        for (var i = 0; i < nums.Length; i++)
+        {
+            ans ^= nums[i];
+        }
+        return ans;
+    }
 }
