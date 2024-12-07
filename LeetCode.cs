@@ -642,4 +642,38 @@ public class LeetCode : MonoBehaviour
         }
         return ans;
     }
+    //[215]数组中的第k个最大元素
+    public int FindKthLargest(int[] nums, int k) {
+        var n = nums.Length;
+        BuildMaxHeap(nums, n);
+        for (var i = n - 1; i >= (n - k); i--)
+        {
+            (nums[0], nums[i]) = (nums[i], nums[0]);
+            MaxHeapify(nums, i, 0);
+        }
+        return nums[n - k];
+    }
+
+    private void BuildMaxHeap(int[] nums, int n)
+    {
+        for (var i = n / 2 - 1; i >= 0; i--)
+        {
+            MaxHeapify(nums, n, i);
+        }
+    }
+    private void MaxHeapify(int[] nums, int n, int i)
+    {
+        var largest = i;
+        var left = 2 * i + 1;
+        var right = 2 * i + 2;
+        if (left < n && nums[left] > nums[largest])
+            largest = left;
+        if (right < n && nums[right] > nums[largest])
+            largest = right;
+        if (largest != i)
+        {
+            (nums[i], nums[largest]) = (nums[largest], nums[i]);
+            MaxHeapify(nums, n, largest);
+        }
+    }
 }
