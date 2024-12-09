@@ -722,4 +722,88 @@ public class LeetCode : MonoBehaviour
         }
         return node != null;
     }
+    // [146] LRU 缓存
+    public class LRUCache
+    {
+        public class LinkListNode
+        {
+            public int key;
+            public int value;
+            public LinkListNode prev;
+            public LinkListNode next;
+
+            public LinkListNode()
+            {
+            }
+
+            public LinkListNode(int k, int v)
+            {
+                key = k;
+                value = v;
+            }
+        }
+        private int capacity;
+        private Dictionary<int, LinkListNode> keys;
+        private LinkListNode head = new LinkListNode();
+        private LinkListNode tail = new LinkListNode();
+        public LRUCache(int capacity)
+        {
+            this.capacity = capacity;
+            keys = new Dictionary<int, LinkListNode>(capacity);
+            head.prev = null;
+            head.next = tail;
+            tail.prev = head;
+            tail.next = null;
+        }
+    
+        public int Get(int key) {
+            if (!keys.ContainsKey(key)) return -1;
+            var node = keys[key];
+            Remove(node);
+            AddFirst(node);
+            return keys[key].value;
+        }
+    
+        public void Put(int key, int value) {
+            if (keys.ContainsKey(key))
+            {
+                var node = keys[key];
+                node.value = value;
+                Remove(node);
+                AddFirst(node);
+            }
+            else
+            {
+                var node = new LinkListNode(key, value);
+                if (keys.Count >= capacity)
+                {
+                    keys.Remove(tail.prev.key);
+                    RemoveLast();
+                }
+                AddFirst(node);
+                keys.Add(key, node);
+            }
+        }
+        public void Remove(LinkListNode node)
+        {
+            if (node == null) return;
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+        }
+
+        public void AddFirst(LinkListNode node)
+        {
+            node.next = head.next;
+            node.next.prev = node;
+            node.prev = head;
+            head.next = node;
+        }
+
+        public void RemoveLast()
+        {
+            var node = tail.prev;
+            tail.prev = node.prev;
+            node.prev.next = tail;
+        }
+    }
 }
