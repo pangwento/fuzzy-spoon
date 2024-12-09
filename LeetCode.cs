@@ -676,4 +676,50 @@ public class LeetCode : MonoBehaviour
             MaxHeapify(nums, n, largest);
         }
     }
+    // [222] 完全二叉树的节点个数
+    public int CountNodes(TreeNode root)
+    {
+        if (root == null) return 0;
+        var level = 0;
+        var node = root;
+        while (node.left != null)
+        {
+            level++;
+            node = node.left;
+        }
+        var left = 1 << level;
+        var right = (1 << (level + 1)) - 1;
+        while (left < right)
+        {
+            var mid = left + (right - left + 1) / 2;
+            if (Exist(root, level, mid))
+            {
+                left = mid;
+            }
+            else
+            {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+    private bool Exist(TreeNode root, int level, int k)
+    {
+        var bits = 1 << (level -1);
+        var node = root;
+        while (node != null && bits > 0)
+        {
+            if ((bits & k) == 0)
+            {
+                node = node.left;
+            }
+            else
+            {
+                node = node.right;
+            }
+
+            bits >>= 1;
+        }
+        return node != null;
+    }
 }
