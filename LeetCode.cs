@@ -806,4 +806,58 @@ public class LeetCode : MonoBehaviour
             node.prev.next = tail;
         }
     }
+    // [219] 存在重复元素 II
+    public bool ContainsNearbyDuplicate(int[] nums, int k)
+    {
+        var dict = new Dictionary<int, int>();
+        for (var i = 0; i < nums.Length; i++)
+        {
+            if (dict.TryGetValue(nums[i], out var v))
+            {
+                if (i - v <= k)
+                    return true;
+                dict[nums[i]] = i;
+            }
+            else
+                dict.Add(nums[i], i);
+        }
+        return false;
+    }
+    //[49] 字母异位词分组
+    public IList<IList<string>> GroupAnagrams(string[] strs)
+    {
+        IList<IList<string>> ans = new List<IList<string>>();
+        var dict = new Dictionary<string, List<string>>();
+        foreach (var str in strs)
+        {
+            var chars = new int[26];
+            foreach (var c in str)
+            {
+                chars[c - 'a']++;
+            }
+
+            var sb = new StringBuilder();
+            for (var i = 0; i < 26; i++)
+            {
+                if (chars[i] != 0)
+                {
+                    sb.Append(i + 'a');
+                    sb.Append(chars[i]);
+                }
+            }
+
+            var key = sb.ToString();
+            if (dict.TryGetValue(key, out var list))
+            {
+                list.Add(str);
+            }
+            else
+            {
+                list = new List<string>() {str};
+                dict.Add(key, list);
+                ans.Add(list);
+            }
+        }
+        return ans;
+    }
 }
