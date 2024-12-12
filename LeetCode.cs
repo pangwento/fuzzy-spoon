@@ -910,4 +910,34 @@ public class LeetCode : MonoBehaviour
         }
         return value;
     }
+    // [155] 最小栈
+    public class MinStack
+    {
+        private Stack<int> stack = new Stack<int>();
+        private Stack<int> minStack = new Stack<int>();
+        public MinStack() {
+            minStack.Push(Int32.MaxValue);
+        }
+    
+        public void Push(int val) {
+            stack.Push(val);
+            minStack.Push(Math.Min(val, minStack.Peek()));
+        }
+    
+        public void Pop()
+        {
+            stack.Pop();
+            minStack.Pop();
+        }
+    
+        public int Top()
+        {
+            return stack.Peek();
+        }
+    
+        public int GetMin()
+        {
+            return minStack.Peek();
+        }
+    }
 }
