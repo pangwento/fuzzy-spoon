@@ -860,4 +860,54 @@ public class LeetCode : MonoBehaviour
         }
         return ans;
     }
+    // [128] 最长连续序列
+    public int LongestConsecutive(int[] nums)
+    {
+        var set = new HashSet<int>();
+        for (var i = 0; i < nums.Length; i++)
+        {
+            set.Add(nums[i]);
+        }
+        var ans = 0;
+        foreach (var num in set)
+        {
+            if (!set.Contains(num - 1))
+            {
+                var len = 1;
+                var s = num;
+                while (set.Contains(s + 1))
+                {
+                    s++;
+                    len++;
+                }
+                if (len > ans)
+                    ans = len;
+            }
+        }
+        return ans;
+    }
+    //[202] 快乐数
+    public bool IsHappy(int n)
+    {
+        var set = new HashSet<int>();
+        n = GetNext(n);
+        while (n != 1 && !set.Contains(n))
+        {
+            set.Add(n);
+            n = GetNext(n);
+        }
+        return n == 1;
+    }
+
+    public int GetNext(int n)
+    {
+        var value = 0;
+        while (n > 0)
+        {
+            var a = n % 10;
+            value += a * a;
+            n = n / 10;
+        }
+        return value;
+    }
 }
