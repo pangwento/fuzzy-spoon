@@ -940,4 +940,115 @@ public class LeetCode : MonoBehaviour
             return minStack.Peek();
         }
     }
+    // [71] 简化路径
+    public string SimplifyPath(string path)
+    {
+        var strs = path.Split('/');
+        var list = new List<string>();
+        foreach (var str in strs)
+        {
+            if (str.Equals(".."))
+            {
+                if (list.Count > 0)
+                    list.RemoveAt(list.Count - 1);
+            }
+            else if (str.Length > 0 && !str.Equals("."))
+            {
+                list.Add(str);
+            }
+        }
+        var sb = new StringBuilder();
+        if (list.Count == 0)
+            sb.Append('/');
+        foreach (var v in list)
+        {
+            sb.Append('/');
+            sb.Append(v);
+        }
+        return sb.ToString();
+    }
+    //[150] 逆波兰表达式求值
+    public int EvalRPN(string[] tokens)
+    {
+        var stack = new Stack<int>();
+        foreach (var token in tokens)
+        {
+            if (token.Equals("+"))
+            {
+                var v1 = stack.Pop();
+                var v2 = stack.Pop();
+                stack.Push(v1 + v2);
+            }
+            else if (token.Equals("-"))
+            {
+                var v1 = stack.Pop();
+                var v2 = stack.Pop();
+                stack.Push(v2 - v1);
+            }
+            else if (token.Equals("*"))
+            {
+                var v1 = stack.Pop();
+                var v2 = stack.Pop();
+                stack.Push(v1 * v2);
+            }
+            else if (token.Equals("/"))
+            {
+                var v1 = stack.Pop();
+                var v2 = stack.Pop();
+                stack.Push(v2 / v1);
+            }
+            else
+            {
+                var value = int.Parse(token);
+                stack.Push(value);
+            }
+        }
+        return stack.Pop();
+    }
+    // [224] 基本计算器
+    public int Calculate(string s)
+    {
+        var stack = new Stack<int>();
+        stack.Push(1);
+        var sign = 1;
+        var len = s.Length;
+        var i = 0;
+        var ans = 0;
+        while (i < len)
+        {
+            if (s[i] == ' ')
+                i++;
+            else if (s[i] == '+')
+            {
+                sign = stack.Peek();
+                i++;
+            }
+            else if (s[i] == '-')
+            {
+                sign = -stack.Peek();
+                i++;
+            }
+            else if (s[i] == '(')
+            {
+                stack.Push(sign);
+                i++;
+            }
+            else if (s[i] == ')')
+            {
+                stack.Pop();
+                i++;
+            }
+            else
+            {
+                var num = 0;
+                while (i < len && s[i] >= '0' && s[i] <= '9')
+                {
+                    num = num * 10 + s[i] - '0';
+                    i++;
+                }
+                ans += sign * num;
+            }
+        }
+        return ans;
+    }
 }
