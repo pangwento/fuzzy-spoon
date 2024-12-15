@@ -1051,4 +1051,50 @@ public class LeetCode : MonoBehaviour
         }
         return ans;
     }
+    // [228] 汇总区间
+    public IList<string> SummaryRanges(int[] nums)
+    {
+        var list = new List<string>();
+        if (nums.Length == 0)
+            return list;
+        var sb = new StringBuilder();
+        var i = 0;
+        while (i < nums.Length)
+        {
+            var start = nums[i];
+            i++;
+            while (i < nums.Length && nums[i] == nums[i-1] + 1)
+            {
+                i++;
+            }
+            var end = nums[i-1];
+            sb.Append(start);
+            if (start != end)
+            {
+                sb.Append("->");
+                sb.Append(end);
+            }
+            list.Add(sb.ToString());
+            sb.Clear();
+        }
+        return list;
+    }
+    // [56] 合并区间
+    public int[][] Merge(int[][] intervals)
+    {
+        if (intervals.Length == 0)
+            return intervals;
+        Array.Sort(intervals, (a, b) =>  a[0].CompareTo(b[0]));
+        var list = new List<int[]>();
+        for(var i = 0; i < intervals.Length; i++)
+        {
+            var l = intervals[i][0];
+            var r = intervals[i][1];
+            if (list.Count == 0 || l > list[^1][1])
+                list.Add(intervals[i]);
+            else
+                list[^1][1] = Math.Max(list[^1][1], r);
+        }
+        return list.ToArray();
+    }
 }
